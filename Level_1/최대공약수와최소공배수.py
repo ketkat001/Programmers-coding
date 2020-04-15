@@ -1,5 +1,5 @@
 def solution(n, m):
-    answer =[]
+    answer = []
     if n >= m:
         num1, num2 = n, m
     else:

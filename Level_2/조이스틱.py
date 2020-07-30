@@ -33,4 +33,4 @@ def solution(name):
     return answer
 
 
-print(solution("BAABAA"))
+print(solution("BBABAAAB"))

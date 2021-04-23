@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-def solution(tickets):
-    answer = []
-    return answer
-=======
 import copy
 
 
@@ -37,7 +32,6 @@ def solution(tickets):
         airport(start, ticket, result, answer)
     answer.sort()
     return answer[0]
->>>>>>> 67b7ffa1b4ef9d9610afd4c1b3506640a74b0287
 
 
 print(solution([['ICN', 'SFO'], ['ICN', 'ATL'], ['SFO', 'ATL'], ['ATL', 'ICN'], ['ATL', 'SFO']]))

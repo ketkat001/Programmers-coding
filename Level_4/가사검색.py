@@ -36,7 +36,7 @@ def solution(words, queries):
         word_dict = insert_word(word_dict, word)
         reverse_word = word[::-1]
         reverse_word_dict = insert_word(reverse_word_dict, reverse_word)
-
+    print(word_dict)
     for query in queries:
         query_len = len(query)
         if query_len not in word_dict:

@@ -43,25 +43,31 @@ def change_puzzle(puzzle):
     return puzzle_map, puzzle_length
 
 
-def find_puzzle(table, puzzle_dict):
+def find_puzzle(x, y, visited, flag, board):
+    board_length = len(board)
+    visited[x][y] = 1
+    stack = [[x, y]]
+    puzzle = [[x, y]]
+    while stack:
+        x, y = stack.pop()
+        for d in range(4):
+            next_x, next_y = x + dx[d], y + dy[d]
+            if 0 <= next_x < board_length and 0 <= next_y < board_length:
+                if not visited[next_x][next_y] and board[next_x][next_y] == flag:
+                    stack.append([next_x, next_y])
+                    puzzle.append([next_x, next_y])
+                    visited[next_x][next_y] = 1
+    return visited, puzzle
+
+
+def table_puzzle(table, puzzle_dict):
     table_length = len(table)
     visit_table = [[0] * table_length for _ in range(table_length)]
     puzzles = []
     for i in range(table_length):
         for j in range(table_length):
             if table[i][j] == 1 and not visit_table[i][j]:
-                visit_table[i][j] = 1
-                stack = [[i, j]]
-                puzzle = [[i, j]]
-                while stack:
-                    x, y = stack.pop()
-                    for d in range(4):
-                        next_x, next_y = x + dx[d], y + dy[d]
-                        if 0 <= next_x < table_length and 0 <= next_y < table_length:
-                            if not visit_table[next_x][next_y] and table[next_x][next_y] == 1:
-                                stack.append([next_x, next_y])
-                                puzzle.append([next_x, next_y])
-                                visit_table[next_x][next_y] = 1
+                visit_table, puzzle = find_puzzle(i, j, visit_table, 1, table)
                 puzzles.append(puzzle)
 
     for puzzle in puzzles:
@@ -75,28 +81,15 @@ def solution(game_board, table):
     puzzle_dict = {}
     for m in range(1, 7):
         puzzle_dict[m] = []
-    puzzle_dict = find_puzzle(table, puzzle_dict)
+    puzzle_dict = table_puzzle(table, puzzle_dict)
     board_length = len(game_board)
     visit_board = [[0] * board_length for _ in range(board_length)]
     for i in range(board_length):
         for j in range(board_length):
             if game_board[i][j] == 0 and not visit_board[i][j]:
-                visit_board[i][j] = 1
-                stack = [[i, j]]
-                puzzle = [[i, j]]
-                while stack:
-                    x, y = stack.pop()
-                    for d in range(4):
-                        next_x, next_y = x + dx[d], y + dy[d]
-                        if 0 <= next_x < board_length and 0 <= next_y < board_length:
-                            if not visit_board[next_x][next_y] and game_board[next_x][next_y] == 0:
-                                stack.append([next_x, next_y])
-                                puzzle.append([next_x, next_y])
-                                visit_board[next_x][next_y] = 1
+                visit_board, puzzle = find_puzzle(i, j, visit_board, 0, game_board)
                 puzzle, puzzle_length = change_puzzle(puzzle)
-
                 answer, puzzle_dict = matching_puzzle(puzzle, puzzle_length, puzzle_dict, answer)
-
     return answer
 
 
@@ -106,13 +99,6 @@ print(solution([[1, 1, 0, 0, 1, 0], [0, 0, 1, 0, 1, 0], [0, 1, 1, 0, 0, 1],
                 [0, 0, 1, 0, 0, 0], [1, 1, 0, 1, 1, 0], [0, 1, 0, 0, 0, 0]]))
 
 
-print(solution([[0, 0, 1, 1, 0],
-                [1, 0, 1, 1, 1],
-                [1, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1]],
-               [[1, 0, 0, 0, 0],
-                [1, 1, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 1, 0],
-                [0, 0, 0, 1, 1]]))
+print(solution([[1, 1, 1, 0, 1], [1, 1, 1, 0, 0], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+               [[1, 1, 0, 0, 0], [1, 0, 0, 0, 0], [0, 0, 1, 0, 0], [1, 0, 1, 1, 0], [1, 1, 0, 0, 0]]))
+
